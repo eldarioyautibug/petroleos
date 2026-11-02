@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis estadístico del transporte de petróleo mediante oleoductos en Ecuador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<dialog id="aviso">
+  <h2>Importante</h2>
+  <p>Este proyecto tiene un carácter <strong>exclusivamente académico</strong>.</p>
+  <button type="button" class="btn" id="aviso-ok">Entendido</button>
+</dialog>
+
+<dialog id="fuentes">
+  <h2>Fuentes de datos</h2>
+  <ul>
+    <li><a href="https://www.eppetroecuador.ec/wp-content/uploads/downloads/2026/01/INFORME-ESTADISTICO-MENSUAL-DICIEMBRE-2025-1.pdf" target="_blank" rel="noopener">EP Petroecuador: informe estadístico mensual, diciembre 2025</a></li>
+    <li><a href="https://contenido.bce.fin.ec/documentos/Estadisticas/Hidrocarburos/ASP202504.pdf" target="_blank" rel="noopener">Banco Central del Ecuador: estadísticas de hidrocarburos</a></li>
+    <li><a href="https://www.ocpecuador.com/servicios/transporte-de-crudo-pesado/" target="_blank" rel="noopener">OCP Ecuador: transporte de crudo pesado</a></li>
+    <li><a href="https://www.ocpecuador.com/" target="_blank" rel="noopener">OCP Ecuador: sitio oficial</a></li>
+  </ul>
+  <button type="button" class="btn" id="fuentes-ok">Cerrar</button>
+</dialog>
+
+<button class="burger" id="burger" aria-expanded="false" aria-controls="side">Menú</button>
+
+<aside class="side" id="side">
+  <a class="brand" href="#inicio">
+    <img src="img/logofigempa.avif" alt="Logo FIGEMPA" onerror="this.remove()">
+    <strong>Proyecto Estadístico</strong>
+    <small>Transporte de crudo por oleoductos en Ecuador</small>
+  </a>
+  <nav aria-label="Principal">
+    <ul>
+      <li><a href="#inicio" data-route="inicio">Inicio</a></li>
+      <li><a href="#introduccion" data-route="introduccion">Introducción</a></li>
+      <li><a href="#mapa" data-route="mapa">Mapa Web</a></li>
+      <li><a href="#descriptiva" data-route="descriptiva">Descriptiva</a></li>
+      <li><a href="#inferencial" data-route="inferencial">Inferencial</a></li>
+      <li><a href="#regresion" data-route="regresion">Regresión</a></li>
+      <li><a href="#ml" data-route="ml">Machine Learning</a></li>
+      <li class="more">
+        <button type="button" id="more-btn" aria-expanded="false" aria-controls="more-list">Más</button>
+        <ul id="more-list" hidden>
+          <li><a href="#nosotros" data-route="nosotros">Nosotros</a></li>
+          <li><a href="#herramientas" data-route="herramientas">Herramientas Usadas</a></li>
+          <li><a href="#conclusiones" data-route="conclusiones">Conclusiones</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<main>
+
+<section class="view" id="inicio">
+  <header class="hero" id="hero">
+    <div class="bg" id="bg"></div>
+    <div class="glow"></div>
+    <div class="hero-in">
+      <span class="badge"><i></i>Proyecto académico FIGEMPA – UCE</span>
+      <h1 id="titulo">Análisis estadístico del transporte de petróleo mediante oleoductos en Ecuador</h1>
+      <p class="deck">Del Oriente al Pacífico: volumen, presión y eficiencia del crudo que cruza los Andes.</p>
+      <div class="ctas">
+        <button type="button" class="btn" data-go="ruta">Ver ruta del crudo</button>
+        <a class="btn ghost" href="#introduccion">Ir a la introducción</a>
+      </div>
+    </div>
+    <span class="scroll" aria-hidden="true"></span>
+  </header>
+
+  <section class="ruta" id="ruta">
+    <div class="ruta-in">
+      <div class="rv">
+        <h2>La ruta del crudo, de Lago Agrio a Esmeraldas</h2>
+        <p class="lead">Dos oleoductos cruzan la cordillera. Elige uno, toca una estación o recorre el trazado con el control inferior. Los trazados y las altitudes son esquemáticos.</p>
+      </div>
+      <div class="ruta-grid">
+        <div class="mapa" id="mapa-box"></div>
+        <div class="panel rv">
+          <div class="modos" role="group" aria-label="Oleoducto">
+            <button type="button" data-modo="todos" aria-pressed="true">Ambos</button>
+            <button type="button" data-modo="sote" aria-pressed="false">SOTE</button>
+            <button type="button" data-modo="ocp" aria-pressed="false">OCP</button>
+          </div>
+          <h3 id="p-tit">Dos rutas, un mismo destino</h3>
+          <p class="sub" id="p-sub">SOTE y OCP</p>
+          <p id="p-txt">Ambos llevan el crudo del Oriente amazónico hasta la costa de Esmeraldas.</p>
+          <div class="rec">
+            <label for="rec">Recorrido esquemático del SOTE</label>
+            <input type="range" id="rec" min="0" max="1000" value="0">
+            <div class="lect"><output id="alt">≈ 300 m</output><span id="lugar">Lago Agrio</span></div>
+            <svg id="perfil" viewBox="0 0 400 120" role="img" aria-label="Perfil de altitud esquemático del SOTE"></svg>
+            
+            <button type="button" class="btn ghost" id="play">Reproducir recorrido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mvband">
+    <div class="mv">
+      <article class="tilt rv" style="--d:0ms">
+        <h2>Misión</h2>
+        <p>Evaluar con herramientas estadísticas y computacionales el transporte de petróleo por oleoductos en Ecuador, analizando el volumen transportado, las condiciones de operación y la eficiencia, para aportar conocimiento académico al sector hidrocarburífero.</p>
+      </article>
+      <article class="tilt rv" style="--d:150ms">
+        <h2>Visión</h2>
+        <p>Ser una referencia académica en el análisis de datos del transporte de crudo en el país, integrando visualización y aprendizaje automático para entender cómo opera la red de oleoductos y dónde puede mejorar.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="motiv" id="motivacion">
+    <h2 class="centro rv">Motivación del proyecto</h2>
+    <div class="motiv-grid">
+      <figure class="foto rv">
+        <img src="img/universidad.jpg" alt="Facultad de Ingeniería en Geología, Minas, Petróleos y Ambiental de la Universidad Central del Ecuador" loading="lazy">
+        <figcaption><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>FIGEMPA</figcaption>
+      </figure>
+      <div class="motiv-txt rv" style="--d:150ms">
+        <p class="eyebrow">Universidad Central del Ecuador</p>
+        <h3>¿Por qué este proyecto?</h3>
+        <p>Como estudiantes de la Universidad Central del Ecuador, desarrollamos este proyecto con el propósito de aplicar la <strong>estadística como herramienta fundamental</strong> en el análisis de datos del mundo real, en este caso el transporte de crudo por oleoductos en nuestro país.</p>
+        <p>Nuestro objetivo no es solo interpretar la información, sino también destacar la relevancia de la estadística en la <em>toma de decisiones informadas</em> dentro del ámbito profesional relacionado con nuestra carrera en geología, minas, petróleos y ambiental.</p>
+        <a class="btn" href="https://www.uce.edu.ec/" target="_blank" rel="noopener">Universidad Central del Ecuador</a>
+      </div>
+    </div>
+  </section>
+</section>
+
+<section class="view intro" id="introduccion" hidden>
+  <div class="orb o1"></div><div class="orb o2"></div>
+  <div class="intro-in">
+    <h2 class="titulo rv">Introducción</h2>
+
+    <article class="glass rv">
+      <h3>Planteamiento del problema</h3>
+      <p>El análisis estadístico del transporte de petróleo en Ecuador permite evaluar el volumen transportado, las condiciones de operación y la eficiencia de los oleoductos SOTE y OCP. Sin embargo, la información publicada por EP Petroecuador, el Banco Central del Ecuador y OCP Ecuador se encuentra dispersa, lo que dificulta su comparación. Por ello, se analizarán variables como caudal, presión, temperatura, distancia, consumo energético y pérdidas estimadas para comprender el comportamiento del transporte de crudo.</p>
+      <button type="button" class="btn" id="ver-fuentes">Ver fuentes de datos</button>
+    </article>
+
+    <div class="borde rv">
+      <article class="general">
+        <h3>Objetivo general</h3>
+        <p>Aplicar herramientas estadísticas y de Machine Learning para evaluar el transporte de petróleo mediante oleoductos en Ecuador, a partir de datos de volumen, operación y eficiencia, mediante herramientas computacionales.</p>
+      </article>
+    </div>
+
+    <article class="esp">
+      <h3 class="rv">Objetivos específicos</h3>
+      <ol>
+        <li class="rv" style="--d:0ms">Conocer la situación actual del transporte de crudo por oleoductos en Ecuador, a través de sus características más importantes y medidas estadísticas.</li>
+        <li class="rv" style="--d:120ms">Emplear un modelo de probabilidad para establecer conclusiones sobre el volumen transportado y las condiciones de operación a partir de los resultados de la muestra.</li>
+        <li class="rv" style="--d:240ms">Deducir relaciones entre las variables del transporte por oleoducto, como caudal, presión, temperatura, consumo energético y pérdidas, con el fin de realizar estimaciones.</li>
+      </ol>
+    </article>
+  </div>
+</section>
+
+<section class="view desc" id="descriptiva" hidden>
+  <div class="desc-in">
+    <header class="rv">
+      <h2 class="titulo">Conceptos básicos</h2>
+    </header>
+
+    <div class="cc-grid">
+      <article class="cc rv" style="--d:0ms">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+        <h3>Población</h3>
+        <p>Todos los registros diarios de operación de los tramos de los oleoductos SOTE y OCP incluidos en la base de datos, entre 2015 y 2025.</p>
+        <div class="plato"><span class="et">Simbólico</span>
+          <p class="mat"><i>N</i> = 10 000 registros</p>
+          <p class="o">o</p>
+          <p class="mat"><i>P</i> = { <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>, …, <i>x</i><sub>10 000</sub> }</p>
+          <p class="nota">donde <i>x</i><sub>i</sub> representa cada registro de la base.</p></div>
+      </article>
+
+      <article class="cc rv" style="--d:120ms">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg></span>
+        <h3>Muestra</h3>
+        <p>Conjunto de registros utilizados para el análisis. Se extrae con muestreo aleatorio estratificado, con un estrato por tramo y afijación proporcional.</p>
+        <div class="plato"><span class="et">Simbólico</span>
+          <p class="mat"><i>n</i><sub>0</sub> = <i>Z</i>² · <i>p</i> · <i>q</i> / <i>e</i>² = 384,2</p>
+          <p class="mat"><i>n</i> = <i>n</i><sub>0</sub> / (1 + (<i>n</i><sub>0</sub> − 1) / <i>N</i>) = 370</p>
+          <p class="o">o</p>
+          <p class="mat"><i>M</i> = { <i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, <i>x</i><sub>3</sub>, …, <i>x</i><sub>370</sub> }</p>
+          <p class="nota">con 95 % de confianza, 5 % de error y <i>p</i> = 0,5.</p></div>
+      </article>
+
+      <article class="cc rv" style="--d:240ms">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></span>
+        <h3>Individuo</h3>
+        <p>Cada registro de la base: un día de operación de un tramo de oleoducto, descrito por 19 variables como caudal, presión, temperatura y pérdidas.</p>
+        <div class="plato"><span class="et">Simbólico</span>
+          <p class="mat"><i>x</i><sub>i</sub></p>
+          <p class="nota">donde <i>i</i> = 1, 2, 3, …, <i>N</i></p></div>
+      </article>
+
+      <article class="cc caso rv">
+        <div>
+          <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 11h6M9 15h6"/></svg></span>
+          <h3>Caso de estudio</h3>
+          <p>Análisis estadístico del transporte de crudo por los oleoductos SOTE y OCP, considerando sus variables de operación, de ubicación y temporales.</p>
+        </div>
+        <div class="plato"><span class="et">Simbólico</span>
+          <p class="mat">CE = <i>f</i>(Oleoducto, Tramo, Caudal, Presión, Temperatura, Fecha)</p>
+          <p class="o">o de forma más simple</p>
+          <p class="mat">CE = Análisis del transporte de crudo por oleoductos</p></div>
+      </article>
+    </div>
+
+          <section class="tv-wrap rv" id="tabla-variables">
+      <h3>Tabla de variables</h3>
+      <p class="tv-sub">Variables de la base de datos, con su tipo, dominio, rango, unidad y escala de medición.</p>
+      <div class="tv-tools">
+        <input type="search" id="tv-q" placeholder="Buscar en la tabla…" aria-label="Buscar en la tabla de variables">
+        <div class="seg" role="group" aria-label="Filtrar por tipo de variable">
+          <button type="button" data-tv="todas" aria-pressed="true">Todas</button>
+          <button type="button" data-tv="cual" aria-pressed="false">Cualitativas</button>
+          <button type="button" data-tv="cuan" aria-pressed="false">Cuantitativas</button>
+        </div>
+        <output id="tv-n" aria-live="polite">21 variables</output>
+      </div>
+      <div class="tv-scroll" tabindex="0" role="region" aria-label="Tabla de variables; se desplaza horizontalmente">
+        <table class="tv">
+          <thead><tr><th scope="col" style="min-width:160px">NOMBRE ORIGINAL</th><th scope="col" style="min-width:170px">NOMBRE CORTO</th><th scope="col" style="min-width:160px">NOMBRE EN R</th><th scope="col" style="min-width:330px">DESCRIPCIÓN</th><th scope="col" style="min-width:120px">TIPO DE VARIABLE</th><th scope="col" style="min-width:100px">SUBTIPO</th><th scope="col" style="min-width:270px">DOMINIO</th><th scope="col" style="min-width:270px">RANGO</th><th scope="col" style="min-width:230px">INSTRUMENTO DE MEDIDA</th><th scope="col" style="min-width:190px">UNIDAD DE MEDIDA</th><th scope="col" style="min-width:120px">ESCALA DE MEDICIÓN</th><th scope="col" style="min-width:120px">VARIABLE ESTADISTICA</th><th scope="col" style="min-width:340px">JUSTIFICACIÓN</th></tr></thead>
+          <tbody>
+<tr data-t="cual"><th scope="row" class="c0">ID_registro</th><td class="ctr">ID_Registro</td><td class="ctr">id_registro</td><td>Código identificador único asignado a cada registro diario de operación de un tramo de oleoducto.</td><td class="ctr"><span class="chip cual">Cualitativa</span></td><td class="ctr">Nominal</td><td class="mat">D={x/x es un código alfanumérico único ˆ x ϵ EC-PIPE-#####}</td><td class="mat">R={x/x ϵ Hoja de datos[ID_registro]} (10 000 registros)</td><td class="ctr">Registro administrativo de la base</td><td class="ctr">_</td><td class="ctr">Nominal</td><td class="ctr"><span class="chip no">False</span></td><td>Únicamente permite identificar cada registro de forma individual, no aporta información estadística por sí sola.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Fecha</th><td class="ctr">Fecha</td><td class="ctr">fecha</td><td>Día calendario al que corresponde el registro de operación.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Discreta</td><td class="mat">D={x/x ϵ Fechas ˆ 2015-01-01 ≤ x ≤ 2025-12-31}</td><td class="mat">R={x/x ϵ D ˆ 2015-01-01 ≤ x ≤ 2025-12-28}</td><td class="ctr">Registro cronológico de la base</td><td class="ctr">Día (AAAA-MM-DD)</td><td class="ctr">Intervalo</td><td class="ctr"><span class="chip si">True</span></td><td>Permite analizar la evolución temporal del transporte de crudo entre 2015 y 2025.</td></tr>
+<tr data-t="cual"><th scope="row" class="c0">Oleoducto</th><td class="ctr">Oleoducto</td><td class="ctr">oleoducto</td><td>Sistema de oleoducto al que pertenece el registro: SOTE (Sistema de Oleoducto Transecuatoriano) u OCP (Oleoducto de Crudos Pesados).</td><td class="ctr"><span class="chip cual">Cualitativa</span></td><td class="ctr">Nominal</td><td class="mat">D={SOTE, OCP}</td><td class="mat">R=D</td><td class="ctr">Registro administrativo de la base</td><td class="ctr">_</td><td class="ctr">Nominal</td><td class="ctr"><span class="chip si">True</span></td><td>Permite comparar el comportamiento de los dos sistemas de transporte, eje central del estudio.</td></tr>
+<tr data-t="cual"><th scope="row" class="c0">Tramo</th><td class="ctr">Tramo</td><td class="ctr">tramo</td><td>Segmento del oleoducto, delimitado por dos estaciones, en el que se registra la operación.</td><td class="ctr"><span class="chip cual">Cualitativa</span></td><td class="ctr">Nominal</td><td class="mat">D={x/x ϵ Tramos de los oleoductos SOTE y OCP}</td><td class="mat">R={x/x ϵ Hoja de datos[Tramo]} (8 tramos)</td><td class="ctr">Registro administrativo de la base</td><td class="ctr">_</td><td class="ctr">Nominal</td><td class="ctr"><span class="chip si">True</span></td><td>Permite analizar la operación por segmento y definir los estratos del muestreo.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Distancia_tramo_km</th><td class="ctr">Distancia_Tramo</td><td class="ctr">distancia_tramo</td><td>Longitud del tramo de oleoducto en el que se registra la operación.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x &gt; 0}</td><td class="mat">R={x/x ϵ D ˆ 55 ≤ x ≤ 220}</td><td class="ctr">Catálogo de tramos (dato simulado)</td><td class="ctr">Kilómetros (km)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Permite relacionar la longitud del tramo con el consumo energético, las pérdidas y las condiciones de operación. Toma solo 8 valores, uno por tramo.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Caudal_barriles_dia</th><td class="ctr">Caudal_Diario</td><td class="ctr">caudal_diario</td><td>Volumen de crudo que circula por el tramo en un día de operación continua (24 h).</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 88 713.69 ≤ x ≤ 492 006.12}</td><td class="ctr">Medidor de flujo (dato simulado)</td><td class="ctr">Barriles por día (bbl/día)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Variable central del estudio: permite estimar el volumen transportado y comparar la capacidad de cada tramo.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Presion_operacion_psi</th><td class="ctr">Presión_Operación</td><td class="ctr">presion_operacion</td><td>Presión a la que opera el tramo durante el día.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 472.72 ≤ x ≤ 1 436.09}</td><td class="ctr">Transmisor de presión (dato simulado)</td><td class="ctr">Libras por pulgada cuadrada (psi)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Condición de operación clave para evaluar el esfuerzo del sistema y su relación con las pérdidas y el consumo energético.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Temperatura_C</th><td class="ctr">Temperatura</td><td class="ctr">temperatura</td><td>Temperatura del crudo durante el transporte en el tramo.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x &gt; -273.15}</td><td class="mat">R={x/x ϵ D ˆ 17.98 ≤ x ≤ 54.91}</td><td class="ctr">Sensor de temperatura (dato simulado)</td><td class="ctr">Grados Celsius (°C)</td><td class="ctr">Intervalo</td><td class="ctr"><span class="chip si">True</span></td><td>Afecta la viscosidad del crudo y, con ello, la presión y la energía requeridas para bombearlo.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Volumen_transportado_barriles</th><td class="ctr">Volumen_Transportado</td><td class="ctr">volumen_transportado</td><td>Volumen de crudo transportado en el día, calculado como caudal × horas de operación / 24.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 87 999.44 ≤ x ≤ 481 882.17}</td><td class="ctr">Cálculo a partir de caudal y horas de operación (dato simulado)</td><td class="ctr">Barriles (bbl)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Mide la cantidad de crudo movida por cada tramo; al derivarse del caudal, se espera una fuerte relación entre ambos.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Horas_operacion_dia</th><td class="ctr">Horas_Operación</td><td class="ctr">horas_operacion</td><td>Horas del día en las que el tramo estuvo operando.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ 0 ≤ x ≤ 24}</td><td class="mat">R={x/x ϵ D ˆ 16.61 ≤ x ≤ 24.00}</td><td class="ctr">Registro de operación (dato simulado)</td><td class="ctr">Horas (h)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Permite medir la disponibilidad del tramo y su efecto sobre el volumen transportado.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Horas_interrupcion_dia</th><td class="ctr">Horas_Interrupción</td><td class="ctr">horas_interrupcion</td><td>Horas del día en las que el tramo estuvo detenido o interrumpido.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ 0 ≤ x ≤ 24}</td><td class="mat">R={x/x ϵ D ˆ 0.00 ≤ x ≤ 7.39}</td><td class="ctr">Registro de operación (dato simulado)</td><td class="ctr">Horas (h)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Permite identificar interrupciones y analizar su relación con el mantenimiento y la eficiencia.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Consumo_energetico_estimado_kWh</th><td class="ctr">Consumo_Energético</td><td class="ctr">consumo_energetico</td><td>Energía eléctrica estimada que consume el tramo en el día para bombear el crudo.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 49.19 ≤ x ≤ 1 179.47}</td><td class="ctr">Medidor de energía (dato simulado)</td><td class="ctr">Kilovatios hora (kWh)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Permite evaluar la eficiencia energética del transporte y compararla entre tramos y oleoductos.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Perdida_estimada_pct</th><td class="ctr">Pérdida_Porcentaje</td><td class="ctr">perdida_porcentaje</td><td>Porcentaje estimado del volumen transportado que se pierde en el tramo.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ 0 ≤ x ≤ 100}</td><td class="mat">R={x/x ϵ D ˆ 0.005 ≤ x ≤ 0.2095}</td><td class="ctr">Balance de volúmenes (dato simulado)</td><td class="ctr">Porcentaje (%)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Permite comparar el nivel de pérdidas entre tramos independientemente del volumen movido.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Perdida_estimada_barriles</th><td class="ctr">Pérdida_Barriles</td><td class="ctr">perdida_barriles</td><td>Volumen estimado de crudo perdido en el día, calculado como volumen transportado × porcentaje de pérdida / 100.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 5.55 ≤ x ≤ 754.08}</td><td class="ctr">Cálculo a partir del volumen y el porcentaje de pérdida (dato simulado)</td><td class="ctr">Barriles (bbl)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Cuantifica el impacto de las pérdidas en barriles; al ser derivada, depende del volumen y del porcentaje de pérdida.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Volumen_entregado_estimado_barriles</th><td class="ctr">Volumen_Entregado</td><td class="ctr">volumen_entregado</td><td>Volumen estimado de crudo que llega al destino, calculado como volumen transportado − pérdida estimada.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 87 926.92 ≤ x ≤ 481 511.29}</td><td class="ctr">Cálculo a partir del volumen y las pérdidas (dato simulado)</td><td class="ctr">Barriles (bbl)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Representa el resultado útil del transporte y permite estimar la eficiencia de entrega.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Gravedad_API_crudo</th><td class="ctr">Gravedad_API</td><td class="ctr">gravedad_api</td><td>Medida de la densidad del crudo transportado respecto del agua; a menor valor, más pesado es el crudo.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ x &gt; 0}</td><td class="mat">R={x/x ϵ D ˆ 11.22 ≤ x ≤ 33.54}</td><td class="ctr">Densímetro (dato simulado)</td><td class="ctr">Grados API (°API)</td><td class="ctr">Intervalo</td><td class="ctr"><span class="chip si">True</span></td><td>Permite diferenciar crudos livianos y pesados y analizar su efecto en la presión y el consumo energético.</td></tr>
+<tr data-t="cual"><th scope="row" class="c0">Mantenimiento</th><td class="ctr">Tipo_Mantenimiento</td><td class="ctr">tipo_mantenimiento</td><td>Tipo de mantenimiento realizado en el tramo durante el día, ordenado según el grado de intervención: sin mantenimiento, preventivo (planificado) y correctivo (por falla).</td><td class="ctr"><span class="chip cual">Cualitativa</span></td><td class="ctr">Ordinal</td><td class="mat">D={No &lt; Preventivo &lt; Correctivo}</td><td class="mat">R=D</td><td class="ctr">Registro de mantenimiento (dato simulado)</td><td class="ctr">_</td><td class="ctr">Ordinal</td><td class="ctr"><span class="chip si">True</span></td><td>Permite relacionar las intervenciones de mantenimiento con las interrupciones y la eficiencia. Se ordena de menor a mayor intervención (No &lt; Preventivo &lt; Correctivo).</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Incidentes_reportados_simulados</th><td class="ctr">Incidentes</td><td class="ctr">incidentes</td><td>Número de incidentes reportados en el tramo durante el día.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Discreta</td><td class="mat">D={x/x ϵ N ˆ x ≥ 0}</td><td class="mat">R={x/x ϵ D ˆ 0 ≤ x ≤ 2}</td><td class="ctr">Registro de incidentes (dato simulado)</td><td class="ctr">Incidentes por registro</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Permite analizar la frecuencia de incidentes y su relación con la presión, la temperatura y el mantenimiento.</td></tr>
+<tr data-t="cuan"><th scope="row" class="c0">Eficiencia_operativa_estimada_pct</th><td class="ctr">Eficiencia_Operativa</td><td class="ctr">eficiencia_operativa</td><td>Indicador no oficial de eficiencia que considera las horas de operación y las pérdidas.</td><td class="ctr"><span class="chip cuan">Cuantitativa</span></td><td class="ctr">Continua</td><td class="mat">D={x/x ϵ ℝ ˆ 0 ≤ x ≤ 100}</td><td class="mat">R={x/x ϵ D ˆ 69.09 ≤ x ≤ 100.00}</td><td class="ctr">Cálculo a partir de horas de operación y pérdidas (dato simulado)</td><td class="ctr">Porcentaje (%)</td><td class="ctr">Razón</td><td class="ctr"><span class="chip si">True</span></td><td>Resume el desempeño de cada tramo en una sola medida y sirve como variable respuesta en modelos de regresión.</td></tr>
+<tr data-t="cual"><th scope="row" class="c0">Estado_operacion</th><td class="ctr">Estado_Operación</td><td class="ctr">estado_operacion</td><td>Condición general de funcionamiento del tramo en el día.</td><td class="ctr"><span class="chip cual">Cualitativa</span></td><td class="ctr">Nominal</td><td class="mat">D={Operativo, Intermitente}</td><td class="mat">R=D</td><td class="ctr">Registro de operación (dato simulado)</td><td class="ctr">_</td><td class="ctr">Nominal</td><td class="ctr"><span class="chip si">True</span></td><td>Permite comparar la proporción de días con operación normal frente a intermitente.</td></tr>
+          <tr data-t="cual"><th scope="row" class="c0">Clase_Gravedad_API</th><td class="ctr">Clase_API</td><td class="ctr">clase_api</td><td>Clase del crudo según su gravedad API: Pesado (menos de 22,3 °API), Mediano (de 22,3 a menos de 31,1 °API) y Liviano (31,1 °API o más). Variable derivada de Gravedad_API_crudo.</td><td class="ctr"><span class="chip cual">Cualitativa</span></td><td class="ctr">Ordinal</td><td class="mat">D={Pesado &lt; Mediano &lt; Liviano}</td><td class="mat">R=D</td><td class="ctr">Cálculo a partir de Gravedad_API_crudo (dato simulado)</td><td class="ctr">_</td><td class="ctr">Ordinal</td><td class="ctr"><span class="chip si">True</span></td><td>Agrupa la gravedad API en clases de uso común en la industria, lo que permite comparar crudos pesados, medianos y livianos y su efecto en la presión y el consumo energético.</td></tr>
+          </tbody>
+        </table>
+        <p class="tv-vacio" id="tv-vacio" hidden>Ninguna variable coincide con la búsqueda.</p>
+      </div>
+    </section>
+  </div>
+</section>
+
+<section class="view obra" id="construccion" hidden>
+  <div class="obra-in">
+    <div class="franja" aria-hidden="true"></div>
+    <h2 class="titulo">En construcción</h2>
+    <p>La sección «<span id="c-nombre"></span>» se publicará cuando avance el análisis.</p>
+    <a class="btn" href="#inicio">Volver al inicio</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Integrantes: Luigy Bone, Ana Carranco, Emily Chicaiza, Dorian Chuqui, Ana Moreno</p>
+  <p>Quito, Ecuador</p>
+</footer>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
