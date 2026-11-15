@@ -165,6 +165,31 @@
         <li class="rv" style="--d:240ms">Deducir relaciones entre las variables del transporte por oleoducto, como caudal, presión, temperatura, consumo energético y pérdidas, con el fin de realizar estimaciones.</li>
       </ol>
     </article>
+
+    <section class="visor-sec" id="ubicacion">
+      <div class="visor-txt rv">
+        <span class="badge"><i></i>Visualización</span>
+        <h3 class="contorno">Mapa de ubicación</h3>
+        <p>Explora el mapa con los controles de zoom o descárgalo en formato PDF para revisarlo en alta resolución.</p>
+        <div class="botones">
+          <a class="btn" href="https://drive.google.com/uc?export=download&amp;id=1B_QqrfrO2ffhjMB3pRrMP0IvLPbkwcgp" target="_blank" rel="noopener">Descargar PDF</a>
+          <a class="btn ghost" href="https://drive.google.com/file/d/1B_QqrfrO2ffhjMB3pRrMP0IvLPbkwcgp/view?usp=sharing" target="_blank" rel="noopener">Abrir en Google Drive</a>
+        </div>
+      </div>
+      <figure class="visor rv" id="visor" style="--d:150ms">
+        <div class="visor-vp" id="visor-vp" tabindex="0" aria-label="Mapa de ubicación. Arrastra para moverlo y usa los botones para acercar o alejar">
+          <img id="mapa-img" src="img/mapa_qgsi_img.png" alt="Mapa de ubicación del proyecto, con leyenda, simbología, norte y escala" draggable="false">
+        </div>
+        <div class="visor-ctl" role="group" aria-label="Controles de zoom">
+          <button type="button" id="z-menos" aria-label="Alejar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
+          <output id="z-val" aria-live="polite">100%</output>
+          <button type="button" id="z-mas" aria-label="Acercar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6M11 8v6"/></svg></button>
+          <span class="sep" aria-hidden="true"></span>
+          <button type="button" id="z-reset" aria-label="Restablecer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 10-2.3 5.7M20 4v7h-7"/></svg></button>
+          <button type="button" id="z-full" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+      </figure>
+    </section>
   </div>
 </section>
 
@@ -262,6 +287,7 @@
         <p class="tv-vacio" id="tv-vacio" hidden>Ninguna variable coincide con la búsqueda.</p>
       </div>
     </section>
+    <p class="sim pie"><strong>Base simulada.</strong> Los 10 000 registros son valores ilustrativos generados con fines académicos; no son mediciones oficiales de EP Petroecuador, SOTE ni OCP.</p>
   </div>
 </section>
 

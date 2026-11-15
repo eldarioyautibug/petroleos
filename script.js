@@ -119,6 +119,7 @@
   addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
   document.addEventListener('visibilitychange', () => { if (!document.hidden && !reduce) frame(); });
 
+
   const K = 110, LON0 = -81.2, LAT0 = 1.7;
   const P = ([lo, la]) => [(lo - LON0) * K, (LAT0 - la) * K];
   const D = a => a.map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ',' + q[1].toFixed(1)).join('');
@@ -339,4 +340,77 @@
   btns.forEach(b => b.addEventListener('click', () => {
     tipo = b.dataset.tv; btns.forEach(x => x.setAttribute('aria-pressed', x === b)); filtrar();
   }));
+})();
+
+(() => {
+  const vp = document.getElementById('visor-vp');
+  if (!vp) return;
+  const im = document.getElementById('mapa-img');
+  const fig = document.getElementById('visor');
+  const val = document.getElementById('z-val');
+  const exts = ['jpg', 'jpeg', 'webp', 'avif', 'gif'];
+  let k = 0;
+  const siguiente = () => {
+    if (k < exts.length) im.src = 'img/mapa_qgsi_img.' + exts[k++];
+    else fig.classList.add('sin-imagen');
+  };
+  im.addEventListener('error', siguiente);
+  if (im.complete && im.naturalWidth === 0) siguiente();
+
+  let esc = 1, tx = 0, ty = 0;
+  const aplicar = () => {
+    const mx = (esc - 1) * vp.clientWidth / 2, my = (esc - 1) * vp.clientHeight / 2;
+    tx = Math.max(-mx, Math.min(mx, tx));
+    ty = Math.max(-my, Math.min(my, ty));
+    im.style.transform = `translate(${tx}px, ${ty}px) scale(${esc})`;
+    val.textContent = Math.round(esc * 100) + '%';
+    vp.classList.toggle('zoom', esc > 1);
+  };
+  const zoom = f => {
+    esc = Math.max(1, Math.min(6, esc * f));
+    if (esc === 1) { tx = 0; ty = 0; }
+    aplicar();
+  };
+  document.getElementById('z-mas').addEventListener('click', () => zoom(1.35));
+  document.getElementById('z-menos').addEventListener('click', () => zoom(1 / 1.35));
+  document.getElementById('z-reset').addEventListener('click', () => { esc = 1; tx = 0; ty = 0; aplicar(); });
+  document.getElementById('z-full').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (fig.requestFullscreen) fig.requestFullscreen();
+    else window.open(im.currentSrc || im.src, '_blank');
+  });
+  document.addEventListener('fullscreenchange', () => aplicar());
+  window.addEventListener('resize', aplicar);
+
+  let drag = null;
+  vp.addEventListener('pointerdown', e => {
+    if (esc === 1) return;
+    drag = { x: e.clientX - tx, y: e.clientY - ty };
+    vp.setPointerCapture(e.pointerId);
+    vp.classList.add('arrastrando');
+  });
+  vp.addEventListener('pointermove', e => {
+    if (!drag) return;
+    tx = e.clientX - drag.x; ty = e.clientY - drag.y; aplicar();
+  });
+  const soltar = () => { drag = null; vp.classList.remove('arrastrando'); };
+  vp.addEventListener('pointerup', soltar);
+  vp.addEventListener('pointercancel', soltar);
+  vp.addEventListener('wheel', e => {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    zoom(e.deltaY < 0 ? 1.15 : 1 / 1.15);
+  }, { passive: false });
+  vp.addEventListener('keydown', e => {
+    if (e.key === '+' || e.key === '=') zoom(1.35);
+    else if (e.key === '-') zoom(1 / 1.35);
+    else if (e.key === '0') { esc = 1; tx = 0; ty = 0; aplicar(); }
+    else if (esc > 1 && e.key.startsWith('Arrow')) {
+      const p = 40;
+      if (e.key === 'ArrowLeft') tx += p; if (e.key === 'ArrowRight') tx -= p;
+      if (e.key === 'ArrowUp') ty += p; if (e.key === 'ArrowDown') ty -= p;
+      aplicar();
+    } else return;
+    e.preventDefault();
+  });
 })();
