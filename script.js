@@ -14,7 +14,7 @@
     mas: 'M5 12h.01M12 12h.01M19 12h.01'
   };
   const links = $$('[data-route]');
-  const views = { inicio: 1, introduccion: 1, descriptiva: 1 };
+  const views = { inicio: 1, introduccion: 1, descriptiva: 1, mapa: 1 };
   const side = $('#side'), burger = $('#burger');
   const moreBtn = $('#more-btn'), moreList = $('#more-list');
   const icon = p => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${p}"/></svg>`;
@@ -118,7 +118,6 @@
   addEventListener('resize', () => { fit(); if (reduce) frame(); });
   addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
   document.addEventListener('visibilitychange', () => { if (!document.hidden && !reduce) frame(); });
-
 
   const K = 110, LON0 = -81.2, LAT0 = 1.7;
   const P = ([lo, la]) => [(lo - LON0) * K, (LAT0 - la) * K];

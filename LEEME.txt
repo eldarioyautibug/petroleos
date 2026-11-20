@@ -1,0 +1,19 @@
+MAPA INTERACTIVO DE OLEODUCTOS SOTE Y OCP – ECUADOR
+
+ARCHIVOS:
+- Oleoductos_Ecuador.qgs: proyecto para abrir en QGIS.
+- datos_oleoductos_ecuador.gpkg: capas vectoriales de oleoductos, estaciones y terminales.
+- mapa_base_fuente_georreferenciado.tif: mapa original georreferenciado de forma aproximada.
+- Mapa_interactivo_Oleoductos.html: versión web con zoom, capas, ventanas emergentes y agrupación numerada de puntos.
+
+PARA QGIS:
+1. Extraiga todo el ZIP en una misma carpeta.
+2. Abra QGIS y use Proyecto > Abrir.
+3. Seleccione Oleoductos_Ecuador.qgs.
+4. Use la herramienta Identificar elementos (icono de una i) y pulse una estación o línea para ver atributos.
+
+PARA LA VERSIÓN WEB:
+Abra Mapa_interactivo_Oleoductos.html con Chrome o Edge. Necesita conexión a Internet para cargar el mapa base y las bibliotecas Leaflet.
+
+NOTA CARTOGRÁFICA:
+Las rutas y ubicaciones vectoriales fueron digitalizadas de forma aproximada a partir del mapa entregado por el usuario y de su retícula. No son datos oficiales de ingeniería ni coordenadas verificadas. El TIFF es el mapa original recortado y georreferenciado aproximadamente.
