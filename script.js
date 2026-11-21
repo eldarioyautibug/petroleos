@@ -14,7 +14,7 @@
     mas: 'M5 12h.01M12 12h.01M19 12h.01'
   };
   const links = $$('[data-route]');
-  const views = { inicio: 1, introduccion: 1, descriptiva: 1, mapa: 1 };
+  const views = { inicio: 1, introduccion: 1, descriptiva: 1, mapa: 1, nosotros: 1 };
   const side = $('#side'), burger = $('#burger');
   const moreBtn = $('#more-btn'), moreList = $('#more-list');
   const icon = p => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${p}"/></svg>`;
